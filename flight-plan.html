@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CKA Flight Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#f4f6fb;
+    --surface:#ffffff;
+    --surface-2:#eef2f9;
+    --ink:#141b2d;
+    --ink-soft:#465272;
+    --ink-faint:#7b87a6;
+    --line:#dbe2ee;
+    --kube:#2f6fe4;
+    --kube-deep:#1f4fb0;
+    --amber:#c9791a;
+    --amber-bg:#fbeed6;
+    --green:#1f8f5f;
+    --code-bg:#0f1a2e;
+    --code-ink:#dbe6ff;
+    --shadow:0 1px 2px rgba(20,27,45,.06),0 8px 24px rgba(20,27,45,.06);
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --bg:#0a1120;
+      --surface:#101c31;
+      --surface-2:#17253d;
+      --ink:#eaf0fb;
+      --ink-soft:#a7b4d0;
+      --ink-faint:#6b7897;
+      --line:#22334f;
+      --kube:#6ea2ff;
+      --kube-deep:#4d84ee;
+      --amber:#e5a94c;
+      --amber-bg:#3a2c14;
+      --green:#4fc38c;
+      --code-bg:#08111f;
+      --code-ink:#cfe0ff;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a1120;
+    --surface:#101c31;
+    --surface-2:#17253d;
+    --ink:#eaf0fb;
+    --ink-soft:#a7b4d0;
+    --ink-faint:#6b7897;
+    --line:#22334f;
+    --kube:#6ea2ff;
+    --kube-deep:#4d84ee;
+    --amber:#e5a94c;
+    --amber-bg:#3a2c14;
+    --green:#4fc38c;
+    --code-bg:#08111f;
+    --code-ink:#cfe0ff;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{font-family:"Sora",sans-serif;text-wrap:balance;line-height:1.15;margin:0}
+  code,kbd{font-family:"IBM Plex Mono",monospace}
+  a{color:var(--kube)}
+
+  /* Hero */
+  header.hero{
+    background:
+      radial-gradient(1100px 420px at 78% -12%, color-mix(in srgb, var(--kube) 22%, transparent), transparent),
+      var(--surface);
+    border-bottom:1px solid var(--line);
+    padding:64px 0 48px;
+  }
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--kube);margin:0 0 18px;font-weight:500;
+  }
+  header.hero h1{font-size:clamp(2.3rem,6vw,3.5rem);font-weight:700;letter-spacing:-.02em}
+  header.hero p.lede{
+    font-size:1.12rem;color:var(--ink-soft);max-width:60ch;margin:18px 0 0;
+  }
+  .facts{
+    display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;
+  }
+  .fact{
+    background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
+    padding:12px 16px;min-width:120px;
+  }
+  .fact .k{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
+  .fact .v{font-family:"Sora",sans-serif;font-weight:600;font-size:1.05rem;margin-top:2px}
+
+  section{padding:52px 0}
+  section + section{border-top:1px solid var(--line)}
+  .kicker{
+    font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-faint);margin:0 0 10px;
+  }
+  section > .wrap > h2{font-size:1.7rem;font-weight:600;letter-spacing:-.01em}
+  section > .wrap > p.intro{color:var(--ink-soft);max-width:65ch;margin:12px 0 0}
+
+  /* Domain weight bars */
+  .domains{display:flex;flex-direction:column;gap:14px;margin-top:28px}
+  .domain{
+    display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:baseline;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;box-shadow:var(--shadow);
+  }
+  .domain h3{font-size:1.05rem;font-weight:600}
+  .domain .pct{font-family:"Sora",sans-serif;font-weight:700;font-size:1.3rem;font-variant-numeric:tabular-nums}
+  .bar{grid-column:1 / -1;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+  .bar span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--kube-deep),var(--kube))}
+  .domain.hot .pct{color:var(--amber)}
+  .domain.hot .bar span{background:linear-gradient(90deg,#a9631a,var(--amber))}
+  .domain .note{grid-column:1 / -1;color:var(--ink-soft);font-size:.94rem;margin:4px 0 0}
+
+  /* Topic cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:26px}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:20px;box-shadow:var(--shadow);
+  }
+  .card h3{font-size:1rem;font-weight:600;display:flex;align-items:center;gap:9px;margin-bottom:6px}
+  .tag{font-family:"IBM Plex Mono",monospace;font-size:.66rem;font-weight:500;letter-spacing:.08em;
+    padding:3px 8px;border-radius:99px;background:var(--surface-2);color:var(--ink-faint);border:1px solid var(--line)}
+  .card ul{margin:8px 0 0;padding-left:18px;color:var(--ink-soft);font-size:.94rem}
+  .card ul li{margin:5px 0}
+  .card ul li code{background:var(--surface-2);padding:1px 5px;border-radius:5px;font-size:.85em;color:var(--ink)}
+
+  /* Timeline */
+  .weeks{display:flex;flex-direction:column;gap:0;margin-top:26px;position:relative}
+  .week{
+    display:grid;grid-template-columns:56px 1fr;gap:20px;padding:20px 0;
+    border-top:1px solid var(--line);
+  }
+  .week:first-child{border-top:0}
+  .week .n{
+    font-family:"Sora",sans-serif;font-weight:700;font-size:1rem;color:var(--surface);
+    background:var(--kube);width:44px;height:44px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;
+  }
+  .week h3{font-size:1.05rem;font-weight:600;margin-bottom:4px}
+  .week p{margin:0;color:var(--ink-soft);font-size:.96rem}
+
+  /* Code */
+  .step{margin-top:24px}
+  .step .head{display:flex;align-items:baseline;gap:12px;margin-bottom:10px}
+  .step .num{
+    font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--kube);font-weight:500;
+    border:1px solid var(--kube);border-radius:8px;padding:2px 8px;flex:none;
+  }
+  .step h3{font-size:1.08rem;font-weight:600}
+  .step p{color:var(--ink-soft);margin:4px 0 0}
+  pre{
+    background:var(--code-bg);color:var(--code-ink);border-radius:12px;
+    padding:16px 18px;overflow-x:auto;margin:12px 0 0;font-size:.85rem;line-height:1.65;
+    border:1px solid color-mix(in srgb, var(--kube) 30%, var(--code-bg));
+  }
+  pre code{font-family:"IBM Plex Mono",monospace}
+  .c{color:#6f88b8}/*comment*/
+  .callout{
+    display:flex;gap:12px;background:var(--amber-bg);border:1px solid color-mix(in srgb,var(--amber) 40%, transparent);
+    border-radius:12px;padding:14px 16px;margin-top:18px;font-size:.94rem;color:var(--ink);
+  }
+  .callout b{color:var(--amber)}
+  .callout .ico{flex:none;font-weight:700;color:var(--amber);font-family:"IBM Plex Mono",monospace}
+
+  footer{padding:40px 0 64px;color:var(--ink-faint);font-size:.86rem}
+  footer .wrap{border-top:1px solid var(--line);padding-top:24px}
+  footer a{color:var(--kube)}
+
+  @media (max-width:560px){
+    .week{grid-template-columns:1fr;gap:8px}
+    .domain{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Certified Kubernetes Administrator · v1.35</p>
+    <h1>Your CKA flight plan</h1>
+    <p class="lede">A performance-based exam: two hours at a real terminal, 15–20 live tasks on live clusters, docs open the whole time. Passing is muscle memory, not recall. This plan gets you there — and stands up a 3-node lab on your own machine to build it.</p>
+    <div class="facts">
+      <div class="fact"><div class="k">Format</div><div class="v">Hands-on CLI</div></div>
+      <div class="fact"><div class="k">Duration</div><div class="v">120 min</div></div>
+      <div class="fact"><div class="k">Pass mark</div><div class="v">66%</div></div>
+      <div class="fact"><div class="k">Validity</div><div class="v">2 years</div></div>
+      <div class="fact"><div class="k">Retake</div><div class="v">1 free</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">The map · where the points are</p>
+    <h2>Five domains, weighted very unevenly</h2>
+    <p class="intro">Study time should follow the weights, not your comfort. Troubleshooting alone is nearly a third of the exam and it draws on every other domain — treat it as the destination, not a topic.</p>
+    <div class="domains">
+      <div class="domain hot">
+        <h3>Troubleshooting</h3><div class="pct">30%</div>
+        <div class="bar"><span style="width:100%"></span></div>
+        <p class="note">Cluster & node failures, failing workloads, broken networking, reading logs and events. Highest-value domain — drill it last, after the others give you the vocabulary.</p>
+      </div>
+      <div class="domain">
+        <h3>Cluster Architecture, Installation &amp; Configuration</h3><div class="pct">25%</div>
+        <div class="bar"><span style="width:83%"></span></div>
+        <p class="note">kubeadm install &amp; upgrade, RBAC, etcd backup/restore, managing node lifecycle. Helm &amp; Kustomize for installing components.</p>
+      </div>
+      <div class="domain">
+        <h3>Services &amp; Networking</h3><div class="pct">20%</div>
+        <div class="bar"><span style="width:66%"></span></div>
+        <p class="note">Pod &amp; service connectivity, NetworkPolicies, the Gateway API, Ingress, and CoreDNS.</p>
+      </div>
+      <div class="domain">
+        <h3>Workloads &amp; Scheduling</h3><div class="pct">15%</div>
+        <div class="bar"><span style="width:50%"></span></div>
+        <p class="note">Deployments &amp; rollouts, ConfigMaps &amp; Secrets, scaling, scheduling, resource limits, self-healing.</p>
+      </div>
+      <div class="domain">
+        <h3>Storage</h3><div class="pct">10%</div>
+        <div class="bar"><span style="width:33%"></span></div>
+        <p class="note">StorageClasses, dynamic provisioning, PVs &amp; PVCs, volume types, access modes &amp; reclaim policy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">The cargo · what to actually learn</p>
+    <h2>Core skills by domain</h2>
+    <p class="intro">Every item here is something you should be able to <em>do</em> at a terminal without looking it up. If you can only describe it, you haven't learned it yet.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Troubleshooting <span class="tag">30%</span></h3>
+        <ul>
+          <li>Read <code>kubectl describe</code> &amp; events to root-cause a stuck pod</li>
+          <li>Debug a <code>NotReady</code> node: kubelet, containerd, certs, disk</li>
+          <li>Inspect control-plane static pods in <code>/etc/kubernetes/manifests</code></li>
+          <li><code>journalctl -u kubelet</code>, <code>crictl ps/logs</code></li>
+          <li>Fix DNS/service resolution failures end to end</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Cluster &amp; Config <span class="tag">25%</span></h3>
+        <ul>
+          <li><code>kubeadm init</code> / <code>join</code> / <code>upgrade</code> a cluster</li>
+          <li>etcd <code>snapshot save</code> &amp; <code>restore</code></li>
+          <li>RBAC: Roles, ClusterRoles &amp; bindings, ServiceAccounts</li>
+          <li><code>drain</code> / <code>cordon</code> / <code>uncordon</code> nodes</li>
+          <li>Install with Helm &amp; render with Kustomize</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Services &amp; Networking <span class="tag">20%</span></h3>
+        <ul>
+          <li>ClusterIP / NodePort / LoadBalancer, plus port-forward</li>
+          <li>Write NetworkPolicies (ingress + egress)</li>
+          <li>Ingress rules and the newer Gateway API</li>
+          <li>Debug CoreDNS &amp; in-cluster name resolution</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Workloads &amp; Scheduling <span class="tag">15%</span></h3>
+        <ul>
+          <li>Deployments, rollouts, <code>rollout undo</code>, scaling</li>
+          <li>ConfigMaps &amp; Secrets into env / volumes</li>
+          <li>Requests/limits, nodeSelector, affinity, taints &amp; tolerations</li>
+          <li>Probes: liveness, readiness, startup</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Storage <span class="tag">10%</span></h3>
+        <ul>
+          <li>PV / PVC binding and access modes</li>
+          <li>StorageClasses &amp; dynamic provisioning</li>
+          <li>Reclaim policies (<code>Retain</code> vs <code>Delete</code>)</li>
+          <li>Mount volumes into pods</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Exam-day speed <span class="tag">meta</span></h3>
+        <ul>
+          <li><code>alias k=kubectl</code> + <code>kubectl</code> completion</li>
+          <li><code>k run</code>/<code>k create --dry-run=client -o yaml</code> to scaffold</li>
+          <li><code>--context</code> per question — always check it first</li>
+          <li>Bookmark-free doc navigation on kubernetes.io</li>
+          <li>Flag &amp; skip: never sink 10 min into one 4% task</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">The itinerary · a 6-week run</p>
+    <h2>Study schedule</h2>
+    <p class="intro">Assumes ~8–10 focused hours per week and that you can already use a Linux shell. Compress to 4 weeks if you work with Kubernetes daily; stretch to 8 if it's new.</p>
+    <div class="weeks">
+      <div class="week"><div class="n">1</div><div><h3>Foundations &amp; your lab</h3><p>Stand up the Multipass cluster below. Learn the architecture (API server, scheduler, controller-manager, etcd, kubelet, kube-proxy). Live in <code>kubectl</code>: get, describe, explain, dry-run generation.</p></div></div>
+      <div class="week"><div class="n">2</div><div><h3>Workloads &amp; scheduling</h3><p>Deployments, ReplicaSets, rollouts, ConfigMaps/Secrets, probes, resources, affinity, taints/tolerations. Rebuild everything from <code>--dry-run</code> YAML, not the docs.</p></div></div>
+      <div class="week"><div class="n">3</div><div><h3>Services, networking &amp; storage</h3><p>Service types, Ingress + Gateway API, NetworkPolicies, CoreDNS. Then PV/PVC, StorageClasses, dynamic provisioning. Break connectivity on purpose and fix it.</p></div></div>
+      <div class="week"><div class="n">4</div><div><h3>Cluster administration</h3><p>The scary ones: <code>kubeadm upgrade</code> a minor version, etcd snapshot &amp; restore, RBAC from scratch, node drain/upgrade. Do each at least three times until it's automatic.</p></div></div>
+      <div class="week"><div class="n">5</div><div><h3>Troubleshooting drills</h3><p>Deliberately break your lab — wrong kubelet config, bad manifest, expired-looking cert, dead CoreDNS — and recover. This is 30% of the exam; spend real time here.</p></div></div>
+      <div class="week"><div class="n">6</div><div><h3>Timed practice &amp; polish</h3><p>Full timed mock exams (killer.sh comes with your exam registration — use both attempts). Fix weak spots, sharpen aliases and speed, book the real thing.</p></div></div>
+    </div>
+    <div class="callout"><span class="ico">★</span><div><b>The single best resource:</b> killercoda.com has free CKA scenario environments, and killer.sh (two sessions included when you register) is deliberately harder than the real exam — if you clear it, exam day feels calm.</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">The vessel · build your lab</p>
+    <h2>A 3-node cluster on Ubuntu Multipass</h2>
+    <p class="intro">Multipass spins up real Ubuntu VMs in seconds. We'll build one control-plane and two workers with kubeadm — the same tool the exam tests — so practice mirrors the real thing. Works on macOS, Windows, or Linux.</p>
+
+    <div class="step">
+      <div class="head"><span class="num">01</span><h3>Install Multipass</h3></div>
+      <p>Install for your host, then confirm it runs.</p>
+<pre><code><span class="c"># macOS</span>
+brew install --cask multipass
+<span class="c"># Windows: download the installer from multipass.run</span>
+<span class="c"># Linux</span>
+sudo snap install multipass
+
+multipass version</code></pre>
+    </div>
+
+    <div class="step">
+      <div class="head"><span class="num">02</span><h3>Launch three VMs</h3></div>
+      <p>Give the control plane at least 2 CPUs and 2&nbsp;GB RAM (a kubeadm requirement). Adjust down for workers if your machine is tight.</p>
+<pre><code>multipass launch 22.04 --name cp     --cpus 2 --memory 2G --disk 10G
+multipass launch 22.04 --name node1  --cpus 2 --memory 2G --disk 10G
+multipass launch 22.04 --name node2  --cpus 2 --memory 2G --disk 10G
+
+multipass list   <span class="c"># note each VM's IP</span></code></pre>
+    </div>
+
+    <div class="step">
+      <div class="head"><span class="num">03</span><h3>Prepare every node (run on all three)</h3></div>
+      <p>Open a shell with <code>multipass shell cp</code> (repeat for node1, node2) and run this block on each. It disables swap, loads kernel modules, sets sysctls, and installs containerd.</p>
+<pre><code><span class="c"># --- swap off (kubeadm refuses to run with swap on) ---</span>
+sudo swapoff -a
+sudo sed -i '/ swap / s/^/#/' /etc/fstab
+
+<span class="c"># --- kernel modules + sysctl for the container network ---</span>
+cat &lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+sudo modprobe overlay &amp;&amp; sudo modprobe br_netfilter
+
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+sudo sysctl --system
+
+<span class="c"># --- containerd runtime ---</span>
+sudo apt-get update &amp;&amp; sudo apt-get install -y containerd
+sudo mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml >/dev/null
+<span class="c"># use the systemd cgroup driver (kubelet expects this)</span>
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+sudo systemctl restart containerd &amp;&amp; sudo systemctl enable containerd</code></pre>
+    </div>
+
+    <div class="step">
+      <div class="head"><span class="num">04</span><h3>Install kubeadm, kubelet &amp; kubectl (all three)</h3></div>
+      <p>Pin to the current stable minor series. Holding the packages stops an accidental <code>apt upgrade</code> from breaking the cluster.</p>
+<pre><code>sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+https://pkgs.k8s.io/core:/stable:/v1.34/deb/ /" \
+  | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl</code></pre>
+      <div class="callout"><span class="ico">i</span><div>Install one minor version <b>behind</b> the exam's (exam is v1.35, so v1.34 here) on purpose — then you can practice the <b>upgrade</b> task, which is worth real points.</div></div>
+    </div>
+
+    <div class="step">
+      <div class="head"><span class="num">05</span><h3>Initialise the control plane (on <code>cp</code> only)</h3></div>
+      <p>Use the <code>cp</code> VM's IP from step 2 as the API advertise address. The pod CIDR here matches Calico's default.</p>
+<pre><code>sudo kubeadm init \
+  --apiserver-advertise-address=&lt;CP_IP&gt; \
+  --pod-network-cidr=192.168.0.0/16
+
+<span class="c"># set up kubectl for the ubuntu user</span>
+mkdir -p $HOME/.kube
+sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubectl get nodes   <span class="c"># cp shows NotReady until the CNI is installed</span></code></pre>
+      <p style="margin-top:10px">Copy the <code>kubeadm join …</code> command it prints — you'll need it in step 7.</p>
+    </div>
+
+    <div class="step">
+      <div class="head"><span class="num">06</span><h3>Install a pod network (on <code>cp</code>)</h3></div>
+      <p>Calico brings the cluster to <code>Ready</code> and lets you practice NetworkPolicies later.</p>
+<pre><code>kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
+
+kubectl get pods -n kube-system -w   <span class="c"># wait for Running, then Ctrl-C</span></code></pre>
+    </div>
+
+    <div class="step">
+      <div class="head"><span class="num">07</span><h3>Join the workers (on <code>node1</code> and <code>node2</code>)</h3></div>
+      <p>Paste the join command from step 5. Lost it? Regenerate on <code>cp</code> with <code>kubeadm token create --print-join-command</code>.</p>
+<pre><code>sudo kubeadm join &lt;CP_IP&gt;:6443 --token &lt;token&gt; \
+  --discovery-token-ca-cert-hash sha256:&lt;hash&gt;</code></pre>
+    </div>
+
+    <div class="step">
+      <div class="head"><span class="num">08</span><h3>Confirm the cluster (on <code>cp</code>)</h3></div>
+      <p>All three nodes should report <code>Ready</code> within a minute or two.</p>
+<pre><code>kubectl get nodes -o wide
+
+<span class="c"># smoke test</span>
+kubectl create deployment web --image=nginx --replicas=3
+kubectl expose deployment web --port=80 --type=NodePort
+kubectl get pods -o wide   <span class="c"># pods spread across node1 / node2</span></code></pre>
+      <div class="callout"><span class="ico">✓</span><div><b>Save your snapshots.</b> Once it's healthy, <code>multipass stop cp node1 node2</code> then <code>multipass snapshot</code> each VM. When a troubleshooting drill wrecks the cluster, restore in seconds instead of rebuilding. <code>multipass start/stop</code> pauses the lab between sessions to save battery.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Built for Kubernetes v1.35 · CKA domain weights per the CNCF/Linux Foundation curriculum.
+    Verify current version, price, and policy at the
+    <a href="https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/">official CKA page</a>
+    before you register — the exam is updated on a rolling basis.
+  </div>
+</footer>
+
+</body>
+</html>

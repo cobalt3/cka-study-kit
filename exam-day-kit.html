@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CKA Exam-Day Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#f4f6fb;--surface:#ffffff;--surface-2:#eef2f9;
+    --ink:#141b2d;--ink-soft:#465272;--ink-faint:#7b87a6;--line:#dbe2ee;
+    --kube:#2f6fe4;--kube-deep:#1f4fb0;--amber:#c9791a;--amber-bg:#fbeed6;
+    --green:#1f8f5f;--rose:#c8385f;--rose-bg:#fbe4ea;
+    --code-bg:#0f1a2e;--code-ink:#dbe6ff;
+    --shadow:0 1px 2px rgba(20,27,45,.06),0 8px 24px rgba(20,27,45,.06);
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --bg:#0a1120;--surface:#101c31;--surface-2:#17253d;
+      --ink:#eaf0fb;--ink-soft:#a7b4d0;--ink-faint:#6b7897;--line:#22334f;
+      --kube:#6ea2ff;--kube-deep:#4d84ee;--amber:#e5a94c;--amber-bg:#3a2c14;
+      --green:#4fc38c;--rose:#f07a9b;--rose-bg:#3a1621;
+      --code-bg:#08111f;--code-ink:#cfe0ff;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a1120;--surface:#101c31;--surface-2:#17253d;
+    --ink:#eaf0fb;--ink-soft:#a7b4d0;--ink-faint:#6b7897;--line:#22334f;
+    --kube:#6ea2ff;--kube-deep:#4d84ee;--amber:#e5a94c;--amber-bg:#3a2c14;
+    --green:#4fc38c;--rose:#f07a9b;--rose-bg:#3a1621;
+    --code-bg:#08111f;--code-ink:#cfe0ff;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{font-family:"Sora",sans-serif;text-wrap:balance;line-height:1.15;margin:0}
+  code,kbd{font-family:"IBM Plex Mono",monospace}
+  a{color:var(--kube)}
+
+  header.hero{background:radial-gradient(1000px 380px at 82% -14%,color-mix(in srgb,var(--kube) 22%,transparent),transparent),var(--surface);
+    border-bottom:1px solid var(--line);padding:52px 0 40px}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--kube);margin:0 0 14px;font-weight:500}
+  header.hero h1{font-size:clamp(2rem,5.5vw,3rem);font-weight:700;letter-spacing:-.02em}
+  header.hero p.lede{font-size:1.06rem;color:var(--ink-soft);max-width:60ch;margin:14px 0 0}
+
+  section{padding:40px 0;border-top:1px solid var(--line)}
+  .kicker{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-faint);margin:0 0 8px}
+  section h2{font-size:1.5rem;font-weight:700;letter-spacing:-.01em}
+  section p.intro{color:var(--ink-soft);max-width:66ch;margin:8px 0 0}
+
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:22px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:18px 20px;box-shadow:var(--shadow)}
+  .card h3{font-size:1rem;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .card h3 .b{font-family:"IBM Plex Mono",monospace;font-size:.68rem;font-weight:500;color:var(--surface);
+    background:var(--kube);border-radius:6px;padding:2px 7px}
+  pre{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:13px 15px;
+    overflow-x:auto;margin:0;font-size:.82rem;line-height:1.6;
+    border:1px solid color-mix(in srgb,var(--kube) 26%,var(--code-bg))}
+  pre code{font-family:"IBM Plex Mono",monospace}
+  .c{color:#6f88b8}
+  .card p.n{color:var(--ink-soft);font-size:.9rem;margin:10px 0 0}
+
+  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.9rem}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-faint);font-weight:500}
+  td code{background:var(--surface-2);padding:1px 6px;border-radius:5px;font-size:.86em}
+  td.sym code{color:var(--rose);background:var(--rose-bg)}
+
+  .steps-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:20px}
+  .flow{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;position:relative}
+  .flow .s{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--kube);font-weight:500}
+  .flow h4{font-family:"Sora",sans-serif;font-size:.95rem;font-weight:600;margin:5px 0 4px}
+  .flow p{margin:0;font-size:.85rem;color:var(--ink-soft)}
+
+  .callout{display:flex;gap:12px;background:var(--amber-bg);border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);
+    border-radius:12px;padding:14px 16px;margin-top:20px;font-size:.94rem;color:var(--ink)}
+  .callout .ico{flex:none;color:var(--amber);font-weight:700;font-family:"IBM Plex Mono",monospace}
+  .callout b{color:var(--amber)}
+
+  footer{padding:36px 0 60px;color:var(--ink-faint);font-size:.85rem}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px}
+</style>
+</head>
+<body>
+
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">CKA v1.35 · the last page you read before the exam</p>
+    <h1>Exam-day kit</h1>
+    <p class="lede">The clock is the real adversary — 15 to 20 tasks in 120 minutes is roughly 6 minutes each. This is the setup and the reflexes that buy back those minutes. Run the first block in the very first two minutes of your exam.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">Minute 0 · set up your shell first</p>
+    <h2>The two-minute investment that saves twenty</h2>
+    <p class="intro">Before you touch a single task, paste this. Every keystroke you save on <code>kubectl</code> compounds across 20 questions.</p>
+    <div class="cols">
+      <div class="card">
+        <h3><span class="b">bash</span> Aliases &amp; completion</h3>
+<pre><code>alias k=kubectl
+source &lt;(kubectl completion bash)
+complete -o default -F __start_kubectl k
+
+<span class="c"># fast dry-run + explain shortcuts</span>
+export do="--dry-run=client -o yaml"
+export now="--force --grace-period=0"
+
+<span class="c"># now you can write:</span>
+k run nginx --image=nginx $do &gt; pod.yaml
+k delete pod nginx $now</code></pre>
+        <p class="n">The <code>$do</code> and <code>$now</code> exports are the two most-cited speed hacks in the CKA community.</p>
+      </div>
+      <div class="card">
+        <h3><span class="b">vim</span> ~/.vimrc for clean YAML</h3>
+<pre><code>cat &lt;&lt;'EOF' &gt; ~/.vimrc
+set number
+set expandtab
+set tabstop=2
+set shiftwidth=2
+EOF</code></pre>
+        <p class="n">YAML is whitespace-sensitive and tabs break it. This makes every paste indent correctly — one of the quietest point-savers on the exam.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">Every question · the first thing you type</p>
+    <h2>Read the task's context before solving it</h2>
+    <p class="intro">Each question runs on a possibly-different cluster. Getting this wrong means solving the right task on the wrong cluster — an automatic zero. It is the number-one avoidable mistake.</p>
+    <div class="cols">
+      <div class="card">
+        <h3><span class="b">1st</span> Switch context — always</h3>
+<pre><code><span class="c"># the exam gives you this line per question — RUN IT</span>
+kubectl config use-context &lt;ctx&gt;
+
+<span class="c"># sanity check where you are</span>
+k config current-context
+k get nodes</code></pre>
+      </div>
+      <div class="card">
+        <h3><span class="b">ssh</span> Some tasks live on a node</h3>
+<pre><code><span class="c"># node-level tasks (kubelet, etcd, kubeadm)</span>
+ssh cp        <span class="c"># the exam sets up ssh for you</span>
+sudo -i       <span class="c"># become root before editing /etc</span>
+exit          <span class="c"># RETURN to the student node when done!</span></code></pre>
+        <p class="n">Forgetting to <code>exit</code> back and running the next question as root on the wrong host is a classic trap.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">Pattern recognition · symptom → cause → fix</p>
+    <h2>Failure fingerprints</h2>
+    <p class="intro">30% of the exam is troubleshooting. When you see the status in the left column, you already know where to look — no guessing.</p>
+    <table>
+      <thead><tr><th>Status you see</th><th>Most likely cause</th><th>First move</th></tr></thead>
+      <tbody>
+        <tr><td class="sym"><code>ImagePullBackOff</code></td><td>Bad image name/tag, or private registry</td><td><code>describe pod</code> → check image spelling</td></tr>
+        <tr><td class="sym"><code>CrashLoopBackOff</code></td><td>App exits immediately / bad command</td><td><code>logs &lt;pod&gt; --previous</code></td></tr>
+        <tr><td class="sym"><code>Pending</code></td><td>No node fits: resources, taints, nodeSelector</td><td><code>describe pod</code> → Events: FailedScheduling</td></tr>
+        <tr><td class="sym"><code>CreateContainerConfigError</code></td><td>Missing ConfigMap/Secret referenced</td><td><code>describe pod</code> → which ref is missing</td></tr>
+        <tr><td class="sym"><code>Node NotReady</code></td><td>kubelet or container runtime down</td><td>ssh node → <code>journalctl -u kubelet</code></td></tr>
+        <tr><td class="sym">Service returns nothing</td><td>Selector matches no pods</td><td><code>k get endpoints &lt;svc&gt;</code> (empty = the bug)</td></tr>
+        <tr><td class="sym">DNS fails in pod</td><td>CoreDNS down or wrong FQDN</td><td>check <code>kube-system</code> coredns pods</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">Muscle memory · the commands you'll type most</p>
+    <h2>High-frequency one-liners</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>Generate &amp; run</h3>
+<pre><code>k run p --image=nginx $do &gt; p.yaml
+k create deploy web --image=nginx --replicas=3 $do
+k expose deploy web --port=80 --type=NodePort
+k set image deploy/web nginx=nginx:1.27
+k scale deploy/web --replicas=5
+k rollout undo deploy/web</code></pre>
+      </div>
+      <div class="card">
+        <h3>Inspect &amp; verify</h3>
+<pre><code>k get pods -o wide --show-labels
+k describe pod &lt;p&gt; | grep -A10 Events
+k logs &lt;p&gt; -c &lt;ctr&gt; --previous
+k get events --sort-by=.lastTimestamp -A
+k explain pod.spec.containers.resources</code></pre>
+      </div>
+      <div class="card">
+        <h3>RBAC self-grade</h3>
+<pre><code>k create role r --verb=get,list --resource=pods
+k create rolebinding b --role=r \
+  --serviceaccount=dev:sa
+k auth can-i list pods \
+  --as=system:serviceaccount:dev:sa</code></pre>
+      </div>
+      <div class="card">
+        <h3>Node maintenance</h3>
+<pre><code>k drain node1 --ignore-daemonsets \
+  --delete-emptydir-data
+k uncordon node1
+k cordon node1
+sudo kubeadm token create \
+  --print-join-command</code></pre>
+      </div>
+      <div class="card">
+        <h3>etcd (read paths from the manifest)</h3>
+<pre><code>sudo ETCDCTL_API=3 etcdctl \
+  snapshot save /tmp/etcd.db \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=...ca.crt --cert=...server.crt \
+  --key=...server.key</code></pre>
+        <p class="n">Copy the cert paths from <code>/etc/kubernetes/manifests/etcd.yaml</code> — don't memorise them.</p>
+      </div>
+      <div class="card">
+        <h3>Docs you're allowed to open</h3>
+<pre><code><span class="c"># only kubernetes.io/docs, /blog, and</span>
+<span class="c"># the k8s GitHub are permitted.</span>
+<span class="c"># pre-know where these pages live:</span>
+<span class="c"># - "kubectl cheat sheet"</span>
+<span class="c"># - "network policies" (has full YAML)</span>
+<span class="c"># - "configure a pod to use a PV"</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">The universal loop · works on any failing thing</p>
+    <h2>The triage sequence</h2>
+    <div class="steps-flow">
+      <div class="flow"><div class="s">01</div><h4>get</h4><p><code>get pods -o wide</code> — status &amp; node</p></div>
+      <div class="flow"><div class="s">02</div><h4>describe</h4><p>read the Events section — it usually names the cause</p></div>
+      <div class="flow"><div class="s">03</div><h4>logs</h4><p><code>logs --previous</code> for crashed containers</p></div>
+      <div class="flow"><div class="s">04</div><h4>fix</h4><p>edit / recreate / correct the ref</p></div>
+      <div class="flow"><div class="s">05</div><h4>verify</h4><p>confirm <code>Running</code> / test with curl before moving on</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">Clock management · how to not run out of time</p>
+    <h2>The rules that decide pass or fail</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>Triage the questions themselves</h3>
+        <p class="n" style="margin-top:0">Each task shows its weight (2–13%). Do the cheap, high-weight ones first. If a task isn't done in ~8 minutes, <b>flag it and move on</b> — a 4% task is never worth sinking 15 minutes into while three others go untouched.</p>
+      </div>
+      <div class="card">
+        <h3>Partial credit is real</h3>
+        <p class="n" style="margin-top:0">Scoring is per-task and often per-step. Get the pod running even if you can't perfect the probe. Never leave a task blank because it's not flawless — bank what you can.</p>
+      </div>
+      <div class="card">
+        <h3>Verify, then leave it</h3>
+        <p class="n" style="margin-top:0">Always confirm your change worked (<code>Running</code>, endpoints populated, curl responds) — but once it's verified, <b>stop polishing</b> and move on. Over-checking a done task is stolen time.</p>
+      </div>
+      <div class="card">
+        <h3>Two attempts, use them</h3>
+        <p class="n" style="margin-top:0">Registration includes a free retake and two killer.sh sessions. Treat attempt one as low-stakes if nerves hit — but you won't need it if killer.sh already felt clearable.</p>
+      </div>
+    </div>
+    <div class="callout"><span class="ico">★</span><div><b>The single highest-leverage habit:</b> run <code>kubectl config use-context</code> at the start of <em>every</em> question, and verify your fix worked before leaving. These two habits alone eliminate the most common ways strong candidates still fail.</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    CKA v1.35 · pairs with your flight plan and lab series. Confirm the current allowed-docs list and exam rules on the
+    <a href="https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/">official CKA page</a> before exam day — policies change.
+  </div>
+</footer>
+
+</body>
+</html>

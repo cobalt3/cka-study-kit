@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CKA Study Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#f4f6fb;--surface:#ffffff;--surface-2:#eef2f9;
+    --ink:#141b2d;--ink-soft:#465272;--ink-faint:#7b87a6;--line:#dbe2ee;
+    --kube:#2f6fe4;--kube-deep:#1f4fb0;--amber:#c9791a;
+    --shadow:0 1px 2px rgba(20,27,45,.06),0 10px 30px rgba(20,27,45,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0a1120;--surface:#101c31;--surface-2:#17253d;
+      --ink:#eaf0fb;--ink-soft:#a7b4d0;--ink-faint:#6b7897;--line:#22334f;
+      --kube:#6ea2ff;--kube-deep:#4d84ee;--amber:#e5a94c;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px rgba(0,0,0,.4);
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{font-family:"Sora",sans-serif;text-wrap:balance;line-height:1.15;margin:0}
+  a{color:var(--kube)}
+  header{background:radial-gradient(1000px 400px at 80% -14%,color-mix(in srgb,var(--kube) 22%,transparent),transparent),var(--surface);
+    border-bottom:1px solid var(--line);padding:72px 0 52px}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--kube);margin:0 0 16px;font-weight:500}
+  header h1{font-size:clamp(2.3rem,6vw,3.4rem);font-weight:700;letter-spacing:-.02em}
+  header p{font-size:1.12rem;color:var(--ink-soft);max-width:60ch;margin:18px 0 0}
+  main{padding:48px 0 60px}
+  .cards{display:grid;gap:16px;margin-top:8px}
+  a.card{display:block;text-decoration:none;color:inherit;background:var(--surface);
+    border:1px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:var(--shadow);
+    transition:transform .15s ease,border-color .15s ease}
+  a.card:hover{transform:translateY(-2px);border-color:var(--kube)}
+  a.card .n{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink-faint)}
+  a.card h2{font-size:1.4rem;font-weight:600;margin:6px 0 6px;color:var(--kube)}
+  a.card p{margin:0;color:var(--ink-soft);font-size:.98rem}
+  footer{color:var(--ink-faint);font-size:.86rem;border-top:1px solid var(--line);padding-top:24px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <p class="eyebrow">Certified Kubernetes Administrator · v1.35</p>
+    <h1>CKA study kit</h1>
+    <p>Everything I used to prepare for the CKA: a weighted study plan, a hands-on lab series built on a local Multipass cluster, and a one-page exam-day reference. Free to fork and use.</p>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <div class="cards">
+      <a class="card" href="flight-plan.html">
+        <div class="n">Start here</div>
+        <h2>The flight plan →</h2>
+        <p>Exam format, the five domains by weight, a 6-week schedule, and step-by-step setup for a 3-node Kubernetes cluster on Ubuntu Multipass.</p>
+      </a>
+      <a class="card" href="lab-series.html">
+        <div class="n">Practice</div>
+        <h2>The lab series →</h2>
+        <p>Nineteen hands-on labs across all five domains — each with an objective, the exact commands, and why it maps to points on the exam.</p>
+      </a>
+      <a class="card" href="exam-day-kit.html">
+        <div class="n">Final review</div>
+        <h2>The exam-day kit →</h2>
+        <p>Shell setup, a symptom→cause→fix table, high-frequency one-liners, and the time-management rules that decide pass or fail.</p>
+      </a>
+    </div>
+    <footer>
+      Built for Kubernetes v1.35. Verify current exam scope and tooling versions on the
+      <a href="https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/">official CKA page</a> before you register — the exam updates on a rolling basis.
+    </footer>
+  </div>
+</main>
+</body>
+</html>

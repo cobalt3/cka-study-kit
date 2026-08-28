@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CKA Lab Series</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#f4f6fb;--surface:#ffffff;--surface-2:#eef2f9;
+    --ink:#141b2d;--ink-soft:#465272;--ink-faint:#7b87a6;--line:#dbe2ee;
+    --kube:#2f6fe4;--kube-deep:#1f4fb0;--amber:#c9791a;--amber-bg:#fbeed6;
+    --green:#1f8f5f;--green-bg:#e2f3ea;--rose:#c8385f;--rose-bg:#fbe4ea;
+    --code-bg:#0f1a2e;--code-ink:#dbe6ff;
+    --shadow:0 1px 2px rgba(20,27,45,.06),0 8px 24px rgba(20,27,45,.06);
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --bg:#0a1120;--surface:#101c31;--surface-2:#17253d;
+      --ink:#eaf0fb;--ink-soft:#a7b4d0;--ink-faint:#6b7897;--line:#22334f;
+      --kube:#6ea2ff;--kube-deep:#4d84ee;--amber:#e5a94c;--amber-bg:#3a2c14;
+      --green:#4fc38c;--green-bg:#123024;--rose:#f07a9b;--rose-bg:#3a1621;
+      --code-bg:#08111f;--code-ink:#cfe0ff;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a1120;--surface:#101c31;--surface-2:#17253d;
+    --ink:#eaf0fb;--ink-soft:#a7b4d0;--ink-faint:#6b7897;--line:#22334f;
+    --kube:#6ea2ff;--kube-deep:#4d84ee;--amber:#e5a94c;--amber-bg:#3a2c14;
+    --green:#4fc38c;--green-bg:#123024;--rose:#f07a9b;--rose-bg:#3a1621;
+    --code-bg:#08111f;--code-ink:#cfe0ff;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:940px;margin:0 auto;padding:0 24px}
+  h1,h2,h3,h4{font-family:"Sora",sans-serif;text-wrap:balance;line-height:1.15;margin:0}
+  code,kbd{font-family:"IBM Plex Mono",monospace}
+  a{color:var(--kube)}
+
+  header.hero{background:radial-gradient(1100px 420px at 80% -12%, color-mix(in srgb,var(--kube) 22%,transparent),transparent),var(--surface);
+    border-bottom:1px solid var(--line);padding:60px 0 44px}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--kube);margin:0 0 16px;font-weight:500}
+  header.hero h1{font-size:clamp(2.2rem,6vw,3.3rem);font-weight:700;letter-spacing:-.02em}
+  header.hero p.lede{font-size:1.1rem;color:var(--ink-soft);max-width:62ch;margin:16px 0 0}
+  .how{display:flex;gap:12px;background:var(--surface-2);border:1px solid var(--line);
+    border-radius:12px;padding:14px 16px;margin-top:26px;font-size:.94rem;color:var(--ink-soft)}
+  .how b{color:var(--ink)}
+
+  /* domain nav */
+  nav.toc{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  nav.toc .wrap{display:flex;gap:8px;overflow-x:auto;padding:12px 24px}
+  nav.toc a{flex:none;text-decoration:none;font-size:.82rem;font-weight:500;color:var(--ink-soft);
+    border:1px solid var(--line);border-radius:99px;padding:6px 13px;background:var(--surface);white-space:nowrap}
+  nav.toc a b{color:var(--kube);font-family:"IBM Plex Mono",monospace}
+
+  .domain-sec{padding:48px 0;border-top:1px solid var(--line)}
+  .dhead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .dhead h2{font-size:1.75rem;font-weight:700;letter-spacing:-.01em}
+  .weight{font-family:"Sora",sans-serif;font-weight:700;font-size:1.4rem;color:var(--kube);
+    font-variant-numeric:tabular-nums;flex:none}
+  .domain-sec.hot .weight{color:var(--amber)}
+  .dsub{color:var(--ink-soft);max-width:66ch;margin:10px 0 0}
+
+  .lab{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    box-shadow:var(--shadow);padding:24px;margin-top:22px;overflow:hidden}
+  .lab .ltop{display:flex;align-items:baseline;gap:12px;margin-bottom:2px}
+  .lab .lid{font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:500;letter-spacing:.05em;
+    color:var(--surface);background:var(--kube);border-radius:7px;padding:3px 8px;flex:none}
+  .domain-sec.hot .lab .lid{background:var(--amber)}
+  .lab h3{font-size:1.16rem;font-weight:600}
+  .lab .obj{color:var(--ink-soft);margin:8px 0 0;font-size:.97rem}
+  h4.mini{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-faint);margin:20px 0 8px;font-weight:500}
+  ol.steps{margin:0;padding-left:20px;color:var(--ink);font-size:.96rem}
+  ol.steps li{margin:6px 0}
+  ol.steps li code{background:var(--surface-2);padding:1px 5px;border-radius:5px;font-size:.86em}
+  pre{background:var(--code-bg);color:var(--code-ink);border-radius:11px;padding:15px 17px;
+    overflow-x:auto;margin:12px 0 0;font-size:.83rem;line-height:1.62;
+    border:1px solid color-mix(in srgb,var(--kube) 28%,var(--code-bg))}
+  pre code{font-family:"IBM Plex Mono",monospace}
+  .c{color:#6f88b8}
+  .why{display:flex;gap:12px;background:var(--green-bg);border:1px solid color-mix(in srgb,var(--green) 38%,transparent);
+    border-radius:11px;padding:13px 15px;margin-top:18px;font-size:.94rem;color:var(--ink)}
+  .why .ico{flex:none;color:var(--green);font-weight:700;font-family:"IBM Plex Mono",monospace}
+  .why b{color:var(--green)}
+  .tip{display:flex;gap:12px;background:var(--amber-bg);border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);
+    border-radius:11px;padding:13px 15px;margin-top:12px;font-size:.93rem;color:var(--ink)}
+  .tip .ico{flex:none;color:var(--amber);font-weight:700;font-family:"IBM Plex Mono",monospace}
+  .tip b{color:var(--amber)}
+  .verify{display:flex;gap:12px;background:var(--surface-2);border:1px solid var(--line);
+    border-radius:11px;padding:13px 15px;margin-top:12px;font-size:.93rem;color:var(--ink-soft)}
+  .verify .ico{flex:none;color:var(--kube);font-weight:700;font-family:"IBM Plex Mono",monospace}
+
+  footer{padding:40px 0 64px;color:var(--ink-faint);font-size:.86rem}
+  footer .wrap{border-top:1px solid var(--line);padding-top:24px}
+  @media (max-width:560px){.dhead{align-items:flex-start}}
+</style>
+</head>
+<body>
+
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">CKA v1.35 · hands-on practice track</p>
+    <h1>The CKA lab series</h1>
+    <p class="lede">Nineteen labs across the five exam domains, each ordered the way you should learn them. Every lab states what you're building, the exact steps, and — the part most guides skip — <em>why</em> it maps to points on exam day. Run them all on the 3-node Multipass cluster from your flight plan.</p>
+    <div class="how">
+      <span>▸</span>
+      <div><b>How to use this:</b> Don't copy-paste blindly. Read the objective, try it from memory first, and only then check the steps. After each lab, snapshot-restore a broken node and redo it timed. The goal is doing these without the docs — because on exam day the clock is the real adversary.</div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <a href="#workloads"><b>15%</b> · Workloads &amp; Scheduling</a>
+    <a href="#networking"><b>20%</b> · Services &amp; Networking</a>
+    <a href="#storage"><b>10%</b> · Storage</a>
+    <a href="#cluster"><b>25%</b> · Cluster Admin</a>
+    <a href="#trouble"><b>30%</b> · Troubleshooting</a>
+  </div>
+</nav>
+
+<!-- ================= WORKLOADS ================= -->
+<section class="domain-sec" id="workloads">
+  <div class="wrap">
+    <div class="dhead"><h2>Workloads &amp; Scheduling</h2><span class="weight">15%</span></div>
+    <p class="dsub">Start here — this is the vocabulary every other domain assumes. Master creating and mutating workloads fast, because half of every exam question begins with "deploy a pod that…"</p>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">W-1</span></div>
+      <h3>Generate everything from <code>--dry-run</code>, never write YAML by hand</h3>
+      <p class="obj">Objective: produce a Deployment, a Pod, and a Job as YAML using imperative commands, then edit the manifest — the fastest workflow under exam time pressure.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code><span class="c"># scaffold a deployment manifest instead of typing it</span>
+kubectl create deployment web --image=nginx --replicas=3 \
+  --dry-run=client -o yaml > web.yaml
+
+<span class="c"># a bare pod</span>
+kubectl run tmp --image=busybox --dry-run=client -o yaml \
+  --command -- sleep 3600 > pod.yaml
+
+<span class="c"># a job</span>
+kubectl create job pi --image=perl:5.34 --dry-run=client -o yaml \
+  -- perl -Mbignum=bpi -wle 'print bpi(200)' > job.yaml
+
+kubectl apply -f web.yaml</code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> Nobody passes by writing YAML from scratch — you won't have time. Almost every task lets you generate 90% with <code>--dry-run=client -o yaml</code> and edit the last 10%. Building this reflex first pays off in every later lab.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">W-2</span></div>
+      <h3>Rollouts, history, and rolling back a bad image</h3>
+      <p class="obj">Objective: update a Deployment's image, watch the rollout, then roll back after a "bad" deploy.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code>kubectl set image deployment/web nginx=nginx:1.27
+kubectl rollout status deployment/web
+kubectl rollout history deployment/web
+
+<span class="c"># simulate a broken release, then recover</span>
+kubectl set image deployment/web nginx=nginx:does-not-exist
+kubectl rollout status deployment/web   <span class="c"># hangs — pods ImagePullBackOff</span>
+kubectl rollout undo deployment/web
+kubectl rollout undo deployment/web --to-revision=1</code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> Rollout and rollback are near-guaranteed exam tasks. Practising the <em>broken</em> path teaches you to recognise <code>ImagePullBackOff</code> instantly and reach for <code>rollout undo</code> — which doubles as a troubleshooting skill.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">W-3</span></div>
+      <h3>Config &amp; Secrets into env vars and volumes</h3>
+      <p class="obj">Objective: inject a ConfigMap and a Secret into a pod both ways — as environment variables and as mounted files.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code>kubectl create configmap app-cfg --from-literal=COLOR=blue --from-literal=TIER=web
+kubectl create secret generic app-sec --from-literal=API_KEY=s3cr3t
+
+<span class="c"># then edit a pod spec to consume them:</span>
+<span class="c">#   envFrom: [configMapRef: app-cfg]  /  env: [secretKeyRef: app-sec/API_KEY]</span>
+<span class="c">#   volumes: [configMap: app-cfg] mounted at /etc/config</span>
+kubectl run consumer --image=busybox --dry-run=client -o yaml \
+  --command -- sleep 3600 > consumer.yaml
+<span class="c"># edit consumer.yaml to add envFrom + volumeMounts, then apply</span>
+kubectl exec consumer -- env | grep COLOR
+kubectl exec consumer -- cat /etc/config/COLOR</code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> Tasks routinely say "expose this value as env var X <em>and</em> mount this config at path Y." Knowing both delivery methods — and how to verify each with <code>exec</code> — is what earns full marks instead of half.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">W-4</span></div>
+      <h3>Scheduling control: taints, tolerations, affinity &amp; probes</h3>
+      <p class="obj">Objective: force a pod onto a specific node, keep others off it, and add health probes so Kubernetes self-heals.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code><span class="c"># taint node1 so ordinary pods avoid it</span>
+kubectl taint nodes node1 tier=critical:NoSchedule
+kubectl label nodes node1 disk=ssd
+
+<span class="c"># a pod that tolerates the taint AND requires the ssd node</span>
+<span class="c">#   tolerations: [key: tier, value: critical, effect: NoSchedule]</span>
+<span class="c">#   nodeSelector: {disk: ssd}   (or nodeAffinity for AND/OR rules)</span>
+
+<span class="c"># add probes to a deployment</span>
+kubectl explain pod.spec.containers.livenessProbe   <span class="c"># learn the fields live</span>
+
+<span class="c"># cleanup: remove the taint (note the trailing minus)</span>
+kubectl taint nodes node1 tier=critical:NoSchedule-</code></pre>
+      <div class="tip"><span class="ico">★</span><div><b>Exam speed:</b> <code>kubectl explain &lt;resource&gt;.&lt;path&gt;</code> is your in-terminal reference — faster than opening the browser for field names like <code>tolerations</code> or <code>periodSeconds</code>.</div></div>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> Placement questions ("schedule this only on nodes labelled X, tolerate taint Y") are common and fiddly. The trailing-minus syntax to <em>remove</em> a taint trips people up — drill it now so it's automatic.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= NETWORKING ================= -->
+<section class="domain-sec" id="networking">
+  <div class="wrap">
+    <div class="dhead"><h2>Services &amp; Networking</h2><span class="weight">20%</span></div>
+    <p class="dsub">Connectivity is where abstract concepts become debuggable. Every lab here ends with a <code>curl</code> or a DNS lookup, because the exam wants proof traffic actually flows.</p>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">N-1</span></div>
+      <h3>The three Service types, proven with curl</h3>
+      <p class="obj">Objective: expose a deployment as ClusterIP, NodePort, then reach it — and understand what each type actually does.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code>kubectl create deployment web --image=nginx --replicas=2
+kubectl expose deployment web --port=80 --name=web-cip           <span class="c"># ClusterIP</span>
+kubectl expose deployment web --port=80 --type=NodePort --name=web-np
+
+<span class="c"># reach ClusterIP from inside the cluster only</span>
+kubectl run t --rm -it --image=busybox --restart=Never -- \
+  wget -qO- web-cip
+
+<span class="c"># reach NodePort from a node (get the assigned 3xxxx port)</span>
+kubectl get svc web-np
+curl &lt;NODE_IP&gt;:&lt;nodePort&gt;</code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> Understanding that ClusterIP is internal-only while NodePort opens a port on every node is the mental model behind half of networking troubleshooting. Testing from a throwaway pod (inside) vs a node (outside) makes the difference concrete.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">N-2</span></div>
+      <h3>NetworkPolicy: default-deny, then allow one path</h3>
+      <p class="obj">Objective: lock a namespace to deny-all ingress, then permit traffic only from a labelled client — the canonical NetworkPolicy task.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code>kubectl create ns secure
+kubectl -n secure run api --image=nginx --labels=app=api --port=80
+kubectl -n secure expose pod api --port=80
+
+<span class="c"># 1) default-deny-ingress policy (podSelector: {}, policyTypes: [Ingress])</span>
+<span class="c"># 2) allow-from-frontend policy: ingress.from.podSelector app=frontend</span>
+kubectl apply -f deny-all.yaml
+kubectl apply -f allow-frontend.yaml
+
+<span class="c"># prove it: a non-frontend pod is blocked, a frontend pod gets through</span>
+kubectl -n secure run probe --rm -it --image=busybox --restart=Never \
+  -- wget -qO- --timeout=3 api          <span class="c"># times out (blocked)</span>
+kubectl -n secure run probe --rm -it --image=busybox --restart=Never \
+  --labels=app=frontend -- wget -qO- --timeout=3 api   <span class="c"># works</span></code></pre>
+      <div class="tip"><span class="ico">★</span><div><b>This only works because you chose Calico.</b> Flannel silently ignores NetworkPolicy, so the "blocked" test would wrongly succeed. If your policies seem to do nothing, check your CNI first.</div></div>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> NetworkPolicy is one of the highest-value, most-missed networking tasks. The deny-all-then-allow pattern is exactly what's tested, and verifying with two differently-labelled probe pods is how you know you got the selector right.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">N-3</span></div>
+      <h3>Ingress and a peek at the Gateway API</h3>
+      <p class="obj">Objective: route two hostnames to two services via an Ingress resource (install an ingress controller first).</p>
+      <h4 class="mini">Steps</h4>
+<pre><code><span class="c"># install the NGINX ingress controller (bare-metal manifest)</span>
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/baremetal/deploy.yaml
+
+kubectl create deployment shop --image=nginx --port=80 && kubectl expose deployment shop --port=80
+kubectl create deployment blog --image=nginx --port=80 && kubectl expose deployment blog --port=80
+
+<span class="c"># Ingress: host shop.local -> shop:80, blog.local -> blog:80</span>
+kubectl create ingress sites --class=nginx \
+  --rule="shop.local/*=shop:80" --rule="blog.local/*=blog:80"
+kubectl describe ingress sites</code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> Ingress (host/path routing) appears regularly, and v1.35 has added the Gateway API to the curriculum — same idea, newer resources (<code>Gateway</code>, <code>HTTPRoute</code>). Build the Ingress muscle first, then read the Gateway API docs so the newer resource names aren't a surprise.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">N-4</span></div>
+      <h3>CoreDNS &amp; in-cluster name resolution</h3>
+      <p class="obj">Objective: confirm how services resolve by DNS name, and know where to look when they don't.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code>kubectl -n kube-system get pods -l k8s-app=kube-dns
+kubectl -n kube-system get svc kube-dns
+
+<span class="c"># resolve a service by its FQDN from a test pod</span>
+kubectl run dns --rm -it --image=busybox:1.28 --restart=Never -- \
+  nslookup web-cip.default.svc.cluster.local
+
+<span class="c"># inspect the DNS config Kubernetes injects into every pod</span>
+kubectl exec dns -- cat /etc/resolv.conf</code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> "Service X can't reach service Y" is frequently a DNS problem, not a routing one. Knowing the FQDN pattern <code>&lt;svc&gt;.&lt;ns&gt;.svc.cluster.local</code> and that CoreDNS runs in <code>kube-system</code> turns a vague failure into a five-minute fix.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STORAGE ================= -->
+<section class="domain-sec" id="storage">
+  <div class="wrap">
+    <div class="dhead"><h2>Storage</h2><span class="weight">10%</span></div>
+    <p class="dsub">The smallest domain, and the most self-contained — you can master it in an afternoon. It's the cheapest 10% on the exam, so don't leave it on the table.</p>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">S-1</span></div>
+      <h3>Static PV → PVC → pod, and watch the binding</h3>
+      <p class="obj">Objective: create a hostPath PersistentVolume, claim it, mount it, and observe the <code>Available → Bound</code> lifecycle.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code><span class="c"># PV: 1Gi, accessModes ReadWriteOnce, hostPath /mnt/data</span>
+<span class="c"># PVC: request 500Mi RWO  ->  binds to the PV above</span>
+kubectl apply -f pv.yaml -f pvc.yaml
+kubectl get pv,pvc              <span class="c"># PVC Bound, PV Bound to the claim</span>
+
+<span class="c"># mount the PVC into a pod at /data and write a file</span>
+kubectl apply -f pod-with-pvc.yaml
+kubectl exec store -- sh -c 'echo hi > /data/test && cat /data/test'</code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> The PV/PVC binding dance — capacity, access mode, and how a claim finds a matching volume — is the conceptual core of the domain. Seeing a PVC go <code>Bound</code> (or stay <code>Pending</code> when nothing matches) is exactly the signal you'll debug on the exam.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">S-2</span></div>
+      <h3>Dynamic provisioning with a StorageClass</h3>
+      <p class="obj">Objective: create a PVC that auto-provisions its PV via a StorageClass, and understand reclaim policy.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code>kubectl get storageclass                 <span class="c"># is one marked (default)?</span>
+
+<span class="c"># a PVC that names a StorageClass -> provisioner creates the PV for you</span>
+kubectl apply -f dynamic-pvc.yaml
+kubectl get pvc,pv                        <span class="c"># PV appears automatically</span>
+
+<span class="c"># inspect reclaim policy: Delete vs Retain</span>
+kubectl get pv -o custom-columns=NAME:.metadata.name,\
+RECLAIM:.spec.persistentVolumeReclaimPolicy,STATUS:.status.phase</code></pre>
+      <div class="tip"><span class="ico">★</span><div><b>Lab note:</b> a fresh kubeadm cluster has no default StorageClass. Install one quickly with the <code>local-path-provisioner</code> (Rancher) manifest so this lab has something to provision against.</div></div>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> The difference between static (you create the PV) and dynamic (the StorageClass creates it) provisioning is a favourite exam distinction, and <code>Retain</code> vs <code>Delete</code> reclaim policy decides whether data survives a deleted PVC — a detail tasks explicitly test.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CLUSTER ADMIN ================= -->
+<section class="domain-sec" id="cluster">
+  <div class="wrap">
+    <div class="dhead"><h2>Cluster Architecture, Installation &amp; Configuration</h2><span class="weight">25%</span></div>
+    <p class="dsub">The heavyweight admin domain. These labs are destructive by nature — this is exactly why you snapshotted your VMs. Break, restore, repeat until each one is boring.</p>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">C-1</span></div>
+      <h3>RBAC from scratch: Role, RoleBinding, ServiceAccount</h3>
+      <p class="obj">Objective: create a ServiceAccount that can only list pods in one namespace, and prove the boundary with <code>auth can-i</code>.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code>kubectl create ns dev
+kubectl -n dev create serviceaccount viewer
+kubectl -n dev create role pod-reader --verb=get,list --resource=pods
+kubectl -n dev create rolebinding viewer-b \
+  --role=pod-reader --serviceaccount=dev:viewer
+
+<span class="c"># verify the permission boundary both ways</span>
+kubectl -n dev auth can-i list pods --as=system:serviceaccount:dev:viewer   <span class="c"># yes</span>
+kubectl -n dev auth can-i delete pods --as=system:serviceaccount:dev:viewer <span class="c"># no</span>
+kubectl -n default auth can-i list pods --as=system:serviceaccount:dev:viewer <span class="c"># no</span></code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> RBAC tasks are common and easy to get subtly wrong (Role vs ClusterRole, verb typos). <code>kubectl auth can-i --as=…</code> lets you self-grade in seconds — the single most useful RBAC verification command, and a huge time-saver on exam day.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">C-2</span></div>
+      <h3>etcd backup and restore</h3>
+      <p class="obj">Objective: take an etcd snapshot, then restore the cluster state from it — the single most feared exam task, worth practising until it's routine.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code><span class="c"># on the control plane; paths come from the etcd static pod manifest</span>
+sudo ETCDCTL_API=3 etcdctl snapshot save /var/backups/etcd.db \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key
+
+sudo ETCDCTL_API=3 etcdctl snapshot status /var/backups/etcd.db -w table
+
+<span class="c"># restore to a NEW data dir, then point etcd at it</span>
+sudo ETCDCTL_API=3 etcdctl snapshot restore /var/backups/etcd.db \
+  --data-dir /var/lib/etcd-restore
+<span class="c"># edit /etc/kubernetes/manifests/etcd.yaml: hostPath -> /var/lib/etcd-restore</span>
+<span class="c"># kubelet restarts the static pod automatically</span></code></pre>
+      <div class="tip"><span class="ico">★</span><div><b>Where the certs live:</b> don't memorise the flag values — read them straight out of <code>/etc/kubernetes/manifests/etcd.yaml</code>. The exam gives you the same file.</div></div>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> etcd restore is high-value and high-panic — many candidates lose points purely to nerves and unfamiliar flags. Doing it five times on a disposable cluster converts panic into procedure. Snapshot your VM right before, so you can retry instantly.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">C-3</span></div>
+      <h3>Upgrade the cluster one minor version</h3>
+      <p class="obj">Objective: upgrade the control plane and a worker from v1.34 to v1.35 with kubeadm — the reason you deliberately installed one version behind.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code><span class="c"># --- control plane ---</span>
+sudo apt-mark unhold kubeadm
+sudo apt-get update &amp;&amp; sudo apt-get install -y kubeadm=1.35.0-*
+sudo kubeadm upgrade plan
+sudo kubeadm upgrade apply v1.35.0
+kubectl drain cp --ignore-daemonsets
+sudo apt-get install -y kubelet=1.35.0-* kubectl=1.35.0-*
+sudo systemctl daemon-reload &amp;&amp; sudo systemctl restart kubelet
+kubectl uncordon cp
+
+<span class="c"># --- each worker (run kubeadm upgrade node, then kubelet) ---</span>
+kubectl drain node1 --ignore-daemonsets
+<span class="c"># on node1: apt install kubeadm; kubeadm upgrade node; apt install kubelet; restart</span>
+kubectl uncordon node1</code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> The upgrade is a guaranteed, high-weight task with a strict order: kubeadm → control plane → drain → kubelet → uncordon, then repeat per worker. Skipping <code>drain</code>/<code>uncordon</code> or upgrading kubelet before kubeadm loses points. This is why the lab cluster runs v1.34.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">C-4</span></div>
+      <h3>Node lifecycle: drain, cordon, and add a node</h3>
+      <p class="obj">Objective: safely evict workloads from a node for maintenance, then bring it back — and regenerate a join command.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code>kubectl cordon node2                       <span class="c"># mark unschedulable, leave pods running</span>
+kubectl drain node2 --ignore-daemonsets --delete-emptydir-data
+<span class="c"># ...do maintenance...</span>
+kubectl uncordon node2
+
+<span class="c"># produce a fresh join command for a new worker</span>
+sudo kubeadm token create --print-join-command</code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> <code>cordon</code> (stop new pods) vs <code>drain</code> (evict existing ones) is a distinction the exam probes directly, and every upgrade/maintenance task depends on it. Regenerating the join token is the fix for "add this node to the cluster" when the original token has expired.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TROUBLESHOOTING ================= -->
+<section class="domain-sec hot" id="trouble">
+  <div class="wrap">
+    <div class="dhead"><h2>Troubleshooting</h2><span class="weight">30%</span></div>
+    <p class="dsub">The biggest domain, and the one you drill <em>last</em> — because it recombines everything above. The method never changes: <code>describe</code> → events → logs → fix → verify. These labs deliberately break your cluster so you learn to read the symptoms.</p>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">T-1</span></div>
+      <h3>The universal triage sequence</h3>
+      <p class="obj">Objective: internalise one repeatable diagnostic path you run on <em>any</em> failing workload before touching anything.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code>kubectl get pods -o wide                 <span class="c"># status + which node</span>
+kubectl describe pod &lt;pod&gt;                <span class="c"># Events section = the story</span>
+kubectl logs &lt;pod&gt; [-c &lt;container&gt;] [--previous]
+kubectl get events --sort-by=.lastTimestamp -A | tail -20</code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> 30% of the exam is time-boxed panic unless you have a reflex. The Events section of <code>describe</code> answers most questions — <code>ImagePullBackOff</code>, <code>FailedScheduling</code>, <code>CrashLoopBackOff</code> all announce themselves there. Run this sequence before forming any theory.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">T-2</span></div>
+      <h3>Break a pod four ways, recognise each on sight</h3>
+      <p class="obj">Objective: deliberately create the four failure states you'll be asked to fix, and learn their fingerprints.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code><span class="c"># 1) ImagePullBackOff — bad image name</span>
+kubectl run bad1 --image=nginx:nope
+<span class="c"># 2) CrashLoopBackOff — process exits immediately</span>
+kubectl run bad2 --image=busybox -- /bin/false
+<span class="c"># 3) Pending / FailedScheduling — impossible resource request</span>
+kubectl run bad3 --image=nginx --overrides='{"spec":{"containers":[{"name":"bad3","image":"nginx","resources":{"requests":{"cpu":"100"}}}]}}'
+<span class="c"># 4) CreateContainerConfigError — missing configmap/secret ref</span>
+
+<span class="c"># diagnose each with the T-1 sequence, then fix and confirm Running</span>
+kubectl describe pod bad3 | grep -A5 Events</code></pre>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> Each state has a distinct cause and fix — image typo, bad command, unschedulable request, missing config. Manufacturing them yourself builds instant pattern recognition, so on exam day you skip straight from symptom to remedy instead of guessing.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">T-3</span></div>
+      <h3>Recover a <code>NotReady</code> node</h3>
+      <p class="obj">Objective: break the kubelet on a worker, diagnose from the node itself, and bring it back to <code>Ready</code>.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code><span class="c"># on node1: stop the kubelet to simulate the failure</span>
+sudo systemctl stop kubelet
+kubectl get nodes                        <span class="c"># node1 -> NotReady</span>
+
+<span class="c"># diagnose ON the node — this is the key habit</span>
+sudo systemctl status kubelet
+sudo journalctl -u kubelet -n 50 --no-pager
+sudo crictl ps                           <span class="c"># is the container runtime alive?</span>
+
+sudo systemctl start kubelet &amp;&amp; sudo systemctl enable kubelet
+kubectl get nodes -w                      <span class="c"># back to Ready</span></code></pre>
+      <div class="tip"><span class="ico">★</span><div><b>Real exam variants:</b> wrong <code>--kubeconfig</code> path in the kubelet service, a full disk, or a stopped containerd. The diagnostic order is always the same: service status → journalctl → runtime.</div></div>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> Node failures are pure points if you know to SSH to the node and read <code>journalctl -u kubelet</code>. Candidates who only ever use <code>kubectl</code> freeze here — because a dead kubelet is invisible to the API. This lab builds the node-level reflex.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">T-4</span></div>
+      <h3>Break the control plane via a static pod manifest</h3>
+      <p class="obj">Objective: introduce a typo into an API-server or scheduler static pod, watch the symptom, and repair it.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code><span class="c"># on cp: edit a control-plane component (e.g. mistype the scheduler image)</span>
+sudo vi /etc/kubernetes/manifests/kube-scheduler.yaml
+<span class="c"># kubelet auto-applies the change; the scheduler pod fails</span>
+
+kubectl -n kube-system get pods           <span class="c"># kube-scheduler not Running</span>
+kubectl -n kube-system describe pod kube-scheduler-cp
+<span class="c"># symptom: new pods stay Pending because nothing schedules them</span>
+
+<span class="c"># when kubectl itself is down (broken apiserver), read the runtime directly:</span>
+sudo crictl ps -a | grep scheduler
+sudo crictl logs &lt;id&gt;
+
+<span class="c"># fix the manifest -> kubelet restarts the static pod automatically</span></code></pre>
+      <div class="tip"><span class="ico">★</span><div><b>Key insight:</b> control-plane components are static pods managed by the kubelet from <code>/etc/kubernetes/manifests</code> — not by the API server. Editing the file <em>is</em> the fix; there's no <code>kubectl apply</code>.</div></div>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> This is the hardest troubleshooting archetype: when the API server or scheduler is broken, <code>kubectl</code> may not help, so you fall back to <code>crictl</code> and the manifest files. Practising it removes the worst exam-day surprise — the moment your usual tool stops responding.</div></div>
+    </div>
+
+    <div class="lab">
+      <div class="ltop"><span class="lid">T-5</span></div>
+      <h3>Debug broken service connectivity end-to-end</h3>
+      <p class="obj">Objective: trace why "service returns nothing" from selector to endpoints to DNS — the full networking triage.</p>
+      <h4 class="mini">Steps</h4>
+<pre><code>kubectl get svc &lt;svc&gt; -o wide
+kubectl get endpoints &lt;svc&gt;               <span class="c"># EMPTY endpoints = selector mismatch</span>
+kubectl describe svc &lt;svc&gt;                 <span class="c"># compare selector to pod labels</span>
+kubectl get pods --show-labels
+
+<span class="c"># then test resolution + reachability from a throwaway pod</span>
+kubectl run t --rm -it --image=busybox:1.28 --restart=Never -- \
+  sh -c 'nslookup &lt;svc&gt; ; wget -qO- --timeout=3 &lt;svc&gt;'</code></pre>
+      <div class="verify"><span class="ico">✓</span><div>An empty <code>endpoints</code> list is the smoking gun: it means the Service's selector matches no pods. Fix the labels, and the endpoints populate instantly.</div></div>
+      <div class="why"><span class="ico">▸</span><div><b>Why it matters:</b> This lab fuses Networking and Troubleshooting — the two domains that are half the exam. The <code>get endpoints</code> step is the highest-leverage move in networking debugging and the one beginners skip, chasing DNS or firewalls when the real cause is a one-character label typo.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Built for Kubernetes v1.35 · run every lab on the 3-node Multipass cluster from your CKA flight plan.
+    Cross-check current exam scope, tooling versions, and the Gateway API additions at the
+    <a href="https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/">official CKA curriculum</a>
+    before exam day. Practice scenarios: killercoda.com (free) and killer.sh (bundled with registration).
+  </div>
+</footer>
+
+</body>
+</html>
